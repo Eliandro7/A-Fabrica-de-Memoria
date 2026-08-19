@@ -662,10 +662,55 @@ quizBtn.textContent = "Quiz";
 quizBtn.onclick = openQuiz;
 nav.appendChild(quizBtn);
 
+const gameCovers = {
+  "God of War Ragnarök": "https://upload.wikimedia.org/wikipedia/en/e/ee/God_of_War_Ragnar%C3%B6k_cover_art.jpg",
+  "The Last of Us Part II": "https://upload.wikimedia.org/wikipedia/en/4/4f/TLOU_Part_II_cover_art.png",
+  "Ghost of Tsushima": "https://duckduckgo.com/i/b6b4648d0939141a.jpg",
+  "Marvel's Spider-Man 2": "https://duckduckgo.com/i/8c304640f76072b9.jpeg",
+  "Horizon Forbidden West": "https://duckduckgo.com/i/9673d2c1dc945135.jpg",
+  "Bloodborne": "https://duckduckgo.com/i/fe712ecf780e9ffd.jpg",
+  "Uncharted 4": "https://duckduckgo.com/i/c2b2c41e122893dd.jpg",
+  "Demon's Souls": "https://duckduckgo.com/i/2e2c22d2d590efc4.jpg",
+  "Gran Turismo 7": "https://duckduckgo.com/i/a0ccccbd8bc326cb.jpg",
+  "Ratchet & Clank: Rift Apart": "https://duckduckgo.com/i/b17d0881c2585c48.png",
+  "Halo Infinite": "https://duckduckgo.com/i/fda3228a321efee7.png",
+  "Forza Horizon 5": "https://duckduckgo.com/i/f3704e52caf2a251.jpg",
+  "Gears 5": "https://duckduckgo.com/i/50a45057913ecd3f.png",
+  "Starfield": "https://duckduckgo.com/i/6ac2c397a9e5a2a4.png",
+  "Hi-Fi Rush": "https://duckduckgo.com/i/561c517e2cddc390.jpg",
+  "Ori and the Will of the Wisps": "https://duckduckgo.com/i/e4b83bb2c830d906.jpg",
+  "Sea of Thieves": "https://duckduckgo.com/i/9e10971179873281.jpg",
+  "Microsoft Flight Simulator": "https://duckduckgo.com/i/8f69956065479ee3.png",
+  "Grounded": "https://duckduckgo.com/i/8d3802b5c6a858ad.jpg",
+  "State of Decay 2": "https://duckduckgo.com/i/c99fa63a5a0d019a.jpg",
+  "The Legend of Zelda: Tears of the Kingdom": "https://duckduckgo.com/i/02edaf2901ab4455.jpg",
+  "Super Mario Odyssey": "https://duckduckgo.com/i/99236a7777bb37ab.jpg",
+  "Mario Kart 8 Deluxe": "https://duckduckgo.com/i/fc6c68645759266b.jpg",
+  "Super Smash Bros. Ultimate": "https://duckduckgo.com/i/4d64022836c719d1.jpg",
+  "Metroid Dread": "https://duckduckgo.com/i/5fc8ae90c296e231.png",
+  "Animal Crossing: New Horizons": "https://duckduckgo.com/i/33a3ccd0aed668f7.jpg",
+  "Splatoon 3": "https://duckduckgo.com/i/5515616387450dae.jpg",
+  "Fire Emblem: Three Houses": "https://duckduckgo.com/i/294e6ede44a91ebf.jpeg",
+  "Luigi's Mansion 3": "https://duckduckgo.com/i/fc7e5215b2f07324.jpg",
+  "Kirby and the Forgotten Land": "https://duckduckgo.com/i/5f088304141bbd58.jpg",
+  "Cyberpunk 2077": "https://duckduckgo.com/i/76c2a8a30bd5cf83.jpg",
+  "Baldur's Gate 3": "https://duckduckgo.com/i/586e94416d4a22fb.jpg",
+  "Minecraft": "https://duckduckgo.com/i/6d88681436130bc2.png",
+  "Counter-Strike 2": "https://duckduckgo.com/i/0b49008966f6e013.jpg",
+  "League of Legends": "https://duckduckgo.com/i/7eb7343bdced7672.png",
+  "Dota 2": "https://duckduckgo.com/i/46fce05b5e1db9aa.jpg",
+  "Cities: Skylines": "https://duckduckgo.com/i/a58d14bc2506bf84.jpg",
+  "Stardew Valley": "https://duckduckgo.com/i/a622a4f180597790.png",
+  "Hades": "https://duckduckgo.com/i/21211b770179baa1.jpg",
+  "Terraria": "https://duckduckgo.com/i/b0d9ea2fafc14cb8.jpg"
+};
+
 function coverUrl(title){
+  if (gameCovers[title]) return gameCovers[title];
   const seed = encodeURIComponent(title.toLowerCase().replaceAll(" ","-"));
   return `https://picsum.photos/seed/${seed}/520/780`;
 }
+
 
 function switchPlatform(key){
   currentPlatform = key;
