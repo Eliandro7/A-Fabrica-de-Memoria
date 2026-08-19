@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A Fábrica de Memória — Catálogo de Jogos</title>
+  <style>
+    :root{
+      --bg:#08090d;
+      --panel:#101218;
+      --panel-2:#171a22;
+      --text:#f7f8fb;
+      --muted:#9ba3b4;
+      --line:rgba(255,255,255,.08);
+      --accent:#4d8dff;
+      --accent-soft:rgba(77,141,255,.18);
+      --shadow:0 24px 70px rgba(0,0,0,.45);
+      --radius:20px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:
+        radial-gradient(circle at 15% -5%, var(--accent-soft), transparent 28rem),
+        linear-gradient(180deg,#090a0f 0%,#07080c 100%);
+      color:var(--text);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      min-height:100vh;
+    }
+
+    button,input{font:inherit}
+    button{cursor:pointer}
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:50;
+      display:flex;
+      align-items:center;
+      gap:18px;
+      padding:16px clamp(18px,4vw,56px);
+      backdrop-filter:blur(18px);
+      background:rgba(8,9,13,.78);
+      border-bottom:1px solid var(--line);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:11px;
+      font-weight:900;
+      letter-spacing:-.5px;
+      font-size:20px;
+      white-space:nowrap;
+    }
+
+    .logo{
+      width:36px;height:36px;border-radius:12px;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg,var(--accent),#8f6cff);
+      box-shadow:0 8px 24px var(--accent-soft);
+    }
+
+    .nav{
+      display:flex;
+      gap:7px;
+      overflow:auto;
+      scrollbar-width:none;
+      flex:1;
+    }
+    .nav::-webkit-scrollbar{display:none}
+
+    .nav-btn{
+      border:0;
+      color:var(--muted);
+      background:transparent;
+      padding:10px 14px;
+      border-radius:999px;
+      transition:.22s ease;
+      white-space:nowrap;
+      font-weight:700;
+    }
+    .nav-btn:hover,.nav-btn.active{
+      color:#fff;
+      background:rgba(255,255,255,.08);
+    }
+
+    .quiz-shortcut{
+      border:1px solid rgba(255,255,255,.12);
+      color:#fff;
+      background:rgba(255,255,255,.06);
+      padding:10px 15px;
+      border-radius:999px;
+      font-weight:800;
+    }
+
+    main{padding-bottom:70px}
+
+    .hero{
+      min-height:420px;
+      padding:70px clamp(18px,5vw,72px) 48px;
+      display:grid;
+      align-items:end;
+      border-bottom:1px solid var(--line);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .hero::after{
+      content:"";
+      position:absolute;inset:0;
+      background:
+        linear-gradient(90deg,rgba(7,8,12,.97) 8%,rgba(7,8,12,.72) 44%,rgba(7,8,12,.18) 78%),
+        linear-gradient(0deg,#08090d 0%,transparent 45%);
+      pointer-events:none;
+    }
+
+    .hero-bg{
+      position:absolute;inset:0;
+      background:
+        radial-gradient(circle at 78% 32%,var(--accent-soft),transparent 22rem),
+        linear-gradient(130deg,#0f1118,#1a2030 50%,#090b11);
+      transform:scale(1.04);
+    }
+
+    .hero-content{
+      position:relative;z-index:2;
+      max-width:690px;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      color:#d6dded;
+      font-size:13px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:1.6px;
+      margin-bottom:12px;
+    }
+
+    h1{
+      font-size:clamp(42px,7vw,84px);
+      line-height:.92;
+      letter-spacing:-4px;
+      margin:0 0 18px;
+    }
+
+    .hero p{
+      color:#c2c9d8;
+      line-height:1.65;
+      max-width:650px;
+      font-size:17px;
+      margin:0;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:12px;
+      margin-top:24px;
+      flex-wrap:wrap;
+    }
+
+    .primary,.secondary{
+      border-radius:14px;
+      border:0;
+      padding:13px 18px;
+      font-weight:900;
+      transition:.2s ease;
+    }
+    .primary{background:#fff;color:#0a0b10}
+    .primary:hover{transform:translateY(-2px)}
+    .secondary{
+      color:#fff;
+      background:rgba(255,255,255,.09);
+      border:1px solid rgba(255,255,255,.11);
+    }
+
+    .section{
+      padding:36px clamp(18px,4vw,56px);
+      max-width:1600px;
+      margin:auto;
+    }
+
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:end;
+      gap:18px;
+      margin-bottom:22px;
+    }
+
+    .section-head h2{
+      margin:0;
+      font-size:clamp(25px,4vw,38px);
+      letter-spacing:-1.4px;
+    }
+
+    .section-head p{
+      margin:8px 0 0;
+      color:var(--muted);
+    }
+
+    .search{
+      width:min(300px,100%);
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.055);
+      border-radius:14px;
+      color:#fff;
+      padding:12px 14px;
+      outline:none;
+    }
+    .search:focus{border-color:var(--accent)}
+
+    .game-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+      gap:18px;
+    }
+
+    .game-card{
+      position:relative;
+      min-width:0;
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      transition:transform .24s ease, box-shadow .24s ease, border-color .24s ease;
+      cursor:pointer;
+    }
+
+    .game-card:hover{
+      transform:translateY(-10px) scale(1.018);
+      box-shadow:var(--shadow);
+      border-color:rgba(255,255,255,.18);
+      z-index:3;
+    }
+
+    .cover{
+      aspect-ratio:2/3;
+      position:relative;
+      overflow:hidden;
+      background:#191c25;
+    }
+
+    .cover img{
+      width:100%;height:100%;
+      object-fit:cover;
+      transition:transform .35s ease,filter .35s ease;
+    }
+
+    .game-card:hover .cover img{
+      transform:scale(1.07);
+      filter:brightness(.72);
+    }
+
+    .cover-overlay{
+      position:absolute;inset:0;
+      display:flex;
+      align-items:end;
+      padding:14px;
+      opacity:0;
+      transition:.24s ease;
+      background:linear-gradient(0deg,rgba(5,6,9,.96),rgba(5,6,9,.03) 70%);
+    }
+
+    .game-card:hover .cover-overlay{opacity:1}
+
+    .quick{
+      display:flex;
+      gap:7px;
+      flex-wrap:wrap;
+    }
+    .chip{
+      font-size:11px;
+      font-weight:850;
+      padding:6px 8px;
+      border-radius:999px;
+      background:rgba(255,255,255,.12);
+      backdrop-filter:blur(8px);
+    }
+
+    .game-info{padding:13px 14px 15px}
+    .game-title{
+      margin:0 0 6px;
+      font-size:15px;
+      font-weight:900;
+      line-height:1.25;
+    }
+    .game-meta{
+      color:var(--muted);
+      font-size:12px;
+      display:flex;
+      gap:7px;
+      flex-wrap:wrap;
+    }
+
+    .empty{
+      grid-column:1/-1;
+      color:var(--muted);
+      padding:40px 0;
+    }
+
+    .quiz-wrap{
+      display:none;
+      max-width:900px;
+      margin:0 auto;
+      padding:46px clamp(18px,4vw,48px);
+    }
+    .quiz-wrap.active{display:block}
+    .catalog.hidden{display:none}
+
+    .quiz-panel{
+      background:linear-gradient(180deg,rgba(255,255,255,.065),rgba(255,255,255,.025));
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:clamp(20px,4vw,38px);
+      box-shadow:var(--shadow);
+    }
+
+    .quiz-top{
+      display:flex;justify-content:space-between;gap:15px;align-items:center;
+      margin-bottom:20px;
+    }
+
+    .quiz-progress{
+      height:8px;
+      background:rgba(255,255,255,.07);
+      border-radius:999px;
+      overflow:hidden;
+      margin:18px 0 28px;
+    }
+    .quiz-progress span{
+      display:block;height:100%;width:0;
+      background:linear-gradient(90deg,var(--accent),#8f6cff);
+      border-radius:inherit;
+      transition:.3s ease;
+    }
+
+    .question{
+      font-size:clamp(22px,4vw,34px);
+      letter-spacing:-1px;
+      margin:0 0 22px;
+    }
+
+    .answers{
+      display:grid;
+      gap:11px;
+    }
+
+    .answer{
+      width:100%;
+      text-align:left;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:#fff;
+      border-radius:15px;
+      padding:15px 16px;
+      transition:.18s ease;
+      font-weight:700;
+    }
+    .answer:hover{
+      transform:translateX(4px);
+      border-color:var(--accent);
+      background:var(--accent-soft);
+    }
+    .answer.correct{background:rgba(80,200,120,.16);border-color:#61d98e}
+    .answer.wrong{background:rgba(255,92,92,.16);border-color:#ff7272}
+    .answer:disabled{cursor:default}
+
+    .quiz-next{
+      display:none;
+      margin-top:20px;
+    }
+
+    .result{
+      text-align:center;
+      padding:20px 5px 5px;
+    }
+    .score{
+      font-size:70px;
+      font-weight:950;
+      letter-spacing:-5px;
+      margin:10px 0;
+    }
+
+    .modal{
+      position:fixed;inset:0;z-index:100;
+      display:none;
+      place-items:center;
+      padding:20px;
+      background:rgba(0,0,0,.74);
+      backdrop-filter:blur(8px);
+    }
+    .modal.active{display:grid}
+
+    .modal-card{
+      width:min(860px,100%);
+      max-height:88vh;
+      overflow:auto;
+      background:#101219;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:25px;
+      box-shadow:0 30px 110px rgba(0,0,0,.72);
+    }
+
+    .modal-hero{
+      min-height:290px;
+      padding:26px;
+      display:flex;
+      align-items:end;
+      position:relative;
+      background:
+        linear-gradient(0deg,#101219 0%,transparent 60%),
+        radial-gradient(circle at 75% 30%,var(--accent-soft),transparent 16rem),
+        linear-gradient(135deg,#1a1f2b,#0c0e13);
+    }
+
+    .close{
+      position:absolute;right:18px;top:18px;
+      width:42px;height:42px;border-radius:50%;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(0,0,0,.55);color:#fff;
+      font-size:21px;
+    }
+
+    .modal-body{padding:0 26px 28px}
+    .modal-body p{color:#c4cad7;line-height:1.7}
+    .detail-grid{
+      display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px
+    }
+    .detail{
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:15px;
+      padding:13px;
+    }
+    .detail small{display:block;color:var(--muted);margin-bottom:5px}
+    .detail strong{font-size:14px}
+
+    .footer{
+      border-top:1px solid var(--line);
+      color:var(--muted);
+      text-align:center;
+      padding:28px 20px 40px;
+      font-size:13px;
+    }
+
+    @media(max-width:720px){
+      .quiz-shortcut{display:none}
+      .hero{min-height:350px;padding-top:42px}
+      h1{letter-spacing:-2.5px}
+      .section-head{align-items:stretch;flex-direction:column}
+      .search{width:100%}
+      .game-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+      .game-info{padding:11px}
+      .detail-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">F</div>
+      A Fábrica de Memória
+    </div>
+
+    <nav class="nav" id="nav"></nav>
+    <button class="quiz-shortcut" onclick="openQuiz()">Quiz</button>
+  </header>
+
+  <main>
+    <div class="catalog" id="catalog">
+      <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+          <div class="eyebrow" id="heroEyebrow">🎮 Catálogo PlayStation</div>
+          <h1 id="heroTitle">PlayStation</h1>
+          <p id="heroText">Explore alguns dos jogos mais marcantes da plataforma. Passe o mouse pelas capas para ver informações rápidas e clique para abrir os detalhes.</p>
+          <div class="hero-actions">
+            <button class="primary" onclick="document.getElementById('games').scrollIntoView()">Explorar jogos</button>
+            <button class="secondary" onclick="openQuiz()">Fazer quiz</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="games">
+        <div class="section-head">
+          <div>
+            <h2 id="sectionTitle">Jogos de PlayStation</h2>
+            <p id="sectionText">10 títulos selecionados para esta plataforma.</p>
+          </div>
+          <input class="search" id="search" type="search" placeholder="Buscar jogo..." />
+        </div>
+        <div class="game-grid" id="gameGrid"></div>
+      </section>
+    </div>
+
+    <section class="quiz-wrap" id="quizWrap">
+      <div class="quiz-panel">
+        <div class="quiz-top">
+          <div>
+            <div class="eyebrow">🧠 Quiz A Fábrica de Memória</div>
+            <strong id="quizCounter">Pergunta 1 de 12</strong>
+          </div>
+          <button class="secondary" onclick="backToCatalog()">Voltar ao catálogo</button>
+        </div>
+
+        <div class="quiz-progress"><span id="progressBar"></span></div>
+        <div id="quizContent"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    Protótipo educacional — A Fábrica de Memória • HTML + CSS + JavaScript
+  </footer>
+
+  <div class="modal" id="modal" onclick="modalBackdrop(event)">
+    <article class="modal-card">
+      <div class="modal-hero">
+        <button class="close" onclick="closeModal()">×</button>
+        <div>
+          <div class="eyebrow" id="modalPlatform"></div>
+          <h2 id="modalTitle" style="font-size:42px;margin:0"></h2>
+        </div>
+      </div>
+      <div class="modal-body">
+        <p id="modalDescription"></p>
+        <div class="detail-grid">
+          <div class="detail"><small>Ano</small><strong id="modalYear"></strong></div>
+          <div class="detail"><small>Gênero</small><strong id="modalGenre"></strong></div>
+          <div class="detail"><small>Desenvolvedora</small><strong id="modalStudio"></strong></div>
+        </div>
+      </div>
+    </article>
+  </div>
+
+<script>
+const platforms = {
+  playstation: {
+    label:"PlayStation",
+    emoji:"△ ○ × □",
+    accent:"#4d8dff",
+    soft:"rgba(77,141,255,.20)",
+    description:"Explore alguns dos jogos mais marcantes associados ao ecossistema PlayStation, misturando aventura, ação, RPG e grandes narrativas.",
+    games:[
+      ["God of War Ragnarök",2022,"Ação / Aventura","Santa Monica Studio","Kratos e Atreus encaram as consequências do Ragnarök em uma jornada épica pelos Nove Reinos."],
+      ["The Last of Us Part II",2020,"Ação / Drama","Naughty Dog","Uma história intensa sobre perda, vingança e consequências em um mundo pós-apocalíptico."],
+      ["Ghost of Tsushima",2020,"Ação / Mundo aberto","Sucker Punch","Jin Sakai luta para proteger Tsushima enquanto precisa escolher entre tradição samurai e novas táticas."],
+      ["Marvel's Spider-Man 2",2023,"Ação / Aventura","Insomniac Games","Peter Parker e Miles Morales enfrentam novas ameaças em uma Nova York ainda mais dinâmica."],
+      ["Horizon Forbidden West",2022,"RPG / Ação","Guerrilla Games","Aloy parte para o Oeste Proibido em busca de respostas para salvar o futuro do planeta."],
+      ["Bloodborne",2015,"RPG / Soulslike","FromSoftware","Uma jornada sombria pela cidade amaldiçoada de Yharnam, marcada por horror gótico e combate desafiador."],
+      ["Uncharted 4",2016,"Ação / Aventura","Naughty Dog","Nathan Drake retorna para uma última aventura atrás de um lendário tesouro pirata."],
+      ["Demon's Souls",2020,"RPG / Soulslike","Bluepoint Games","Um remake visualmente impressionante do clássico que ajudou a definir o gênero soulslike."],
+      ["Gran Turismo 7",2022,"Corrida / Simulação","Polyphony Digital","Experiência automobilística com centenas de carros, pistas e foco em realismo."],
+      ["Ratchet & Clank: Rift Apart",2021,"Ação / Plataforma","Insomniac Games","Uma aventura veloz por dimensões diferentes, aproveitando transições quase instantâneas."]
+    ]
+  },
+
+  xbox: {
+    label:"Xbox",
+    emoji:"◉ XBOX",
+    accent:"#42c65a",
+    soft:"rgba(66,198,90,.19)",
+    description:"Uma seleção de franquias conhecidas no Xbox, com ação, corrida, RPG, exploração e grandes experiências multiplayer.",
+    games:[
+      ["Halo Infinite",2021,"FPS / Ficção científica","343 Industries","Master Chief retorna para enfrentar uma nova ameaça em um vasto anel Halo."],
+      ["Forza Horizon 5",2021,"Corrida / Mundo aberto","Playground Games","Explore o México em um festival automobilístico cheio de desafios, carros e eventos."],
+      ["Gears 5",2019,"Ação / Tiro","The Coalition","Kait Diaz investiga segredos ligados à origem dos Locust enquanto uma nova ameaça cresce."],
+      ["Starfield",2023,"RPG / Ficção científica","Bethesda Game Studios","Um RPG espacial focado em exploração, criação de personagem e centenas de mundos."],
+      ["Hi-Fi Rush",2023,"Ação / Ritmo","Tango Gameworks","Combate estiloso sincronizado com a música em uma aventura cheia de personalidade."],
+      ["Ori and the Will of the Wisps",2020,"Metroidvania","Moon Studios","Uma aventura emocional com exploração fluida, plataformas e belíssima direção de arte."],
+      ["Sea of Thieves",2018,"Aventura / Multiplayer","Rare","Navegue, explore ilhas e viva aventuras piratas em um mundo compartilhado."],
+      ["Microsoft Flight Simulator",2020,"Simulação","Asobo Studio","Uma simulação de voo em escala global com alto nível de detalhe e realismo."],
+      ["Grounded",2022,"Sobrevivência","Obsidian Entertainment","Encolhido ao tamanho de um inseto, o jogador precisa sobreviver em um quintal gigantesco."],
+      ["State of Decay 2",2018,"Sobrevivência / Zumbis","Undead Labs","Administre uma comunidade e sobreviva a um mundo dominado por zumbis."]
+    ]
+  },
+
+  nintendo: {
+    label:"Nintendo",
+    emoji:"● NINTENDO",
+    accent:"#ff4b55",
+    soft:"rgba(255,75,85,.19)",
+    description:"Jogos marcantes do universo Nintendo, conhecidos pela criatividade, identidade visual forte e mecânicas acessíveis e inventivas.",
+    games:[
+      ["The Legend of Zelda: Tears of the Kingdom",2023,"Aventura / Mundo aberto","Nintendo","Link explora Hyrule, os céus e as profundezas usando habilidades criativas para resolver desafios."],
+      ["Super Mario Odyssey",2017,"Plataforma / Aventura","Nintendo","Mario viaja por reinos variados acompanhado de Cappy em busca de Peach."],
+      ["Mario Kart 8 Deluxe",2017,"Corrida","Nintendo","Corridas caóticas com personagens, itens e pistas inspiradas em várias franquias Nintendo."],
+      ["Super Smash Bros. Ultimate",2018,"Luta","Bandai Namco / Sora","Um enorme crossover que reúne dezenas de personagens históricos dos videogames."],
+      ["Metroid Dread",2021,"Ação / Metroidvania","MercurySteam","Samus explora o planeta ZDR enquanto enfrenta criaturas e máquinas perseguidoras."],
+      ["Animal Crossing: New Horizons",2020,"Simulação social","Nintendo","Construa e personalize sua própria ilha enquanto interage com moradores e visitantes."],
+      ["Splatoon 3",2022,"Tiro / Multiplayer","Nintendo","Combates coloridos nos quais equipes disputam território usando tinta."],
+      ["Fire Emblem: Three Houses",2019,"RPG / Estratégia","Intelligent Systems","Estratégia por turnos com relações entre personagens e escolhas que alteram a história."],
+      ["Luigi's Mansion 3",2019,"Aventura","Next Level Games","Luigi explora um hotel assombrado e captura fantasmas com equipamentos especiais."],
+      ["Kirby and the Forgotten Land",2022,"Plataforma / Aventura","HAL Laboratory","Kirby explora ambientes tridimensionais e absorve habilidades em um mundo misterioso."]
+    ]
+  },
+
+  pc: {
+    label:"PC",
+    emoji:"⌨ PC GAMING",
+    accent:"#9c78ff",
+    soft:"rgba(156,120,255,.19)",
+    description:"No PC, diferentes gêneros e comunidades convivem lado a lado, indo de estratégia e simulação até RPG, survival e grandes experiências online.",
+    games:[
+      ["Cyberpunk 2077",2020,"RPG / Ação","CD Projekt Red","Um RPG futurista ambientado em Night City, com narrativa, exploração e grande liberdade de construção."],
+      ["Baldur's Gate 3",2023,"RPG","Larian Studios","Um RPG baseado em escolhas, combate tático e liberdade para resolver situações de inúmeras maneiras."],
+      ["Minecraft",2011,"Sandbox / Sobrevivência","Mojang","Construa, explore e sobreviva em mundos gerados proceduralmente usando blocos."],
+      ["Counter-Strike 2",2023,"FPS competitivo","Valve","Tiro competitivo tático baseado em equipes, economia e domínio de mapas."],
+      ["League of Legends",2009,"MOBA","Riot Games","Duas equipes competem para destruir a base adversária utilizando campeões com habilidades únicas."],
+      ["Dota 2",2013,"MOBA","Valve","MOBA estratégico conhecido por sua profundidade, variedade de heróis e alto nível competitivo."],
+      ["Cities: Skylines",2015,"Simulação / Gestão","Colossal Order","Construa e administre uma cidade cuidando de trânsito, serviços, economia e expansão urbana."],
+      ["Stardew Valley",2016,"Simulação / RPG","ConcernedApe","Cuide de uma fazenda, conheça moradores e explore minas em uma experiência relaxante."],
+      ["Hades",2020,"Roguelike / Ação","Supergiant Games","Zagreus tenta escapar do submundo em combates rápidos e uma narrativa que evolui a cada tentativa."],
+      ["Terraria",2011,"Sandbox / Aventura","Re-Logic","Explore, construa e enfrente criaturas em um vasto mundo 2D cheio de progressão e descobertas."]
+    ]
+  }
+};
+
+const quiz = [
+  {q:"Qual jogo acompanha Kratos e Atreus durante os acontecimentos ligados ao Ragnarök?", a:["Ghost of Tsushima","God of War Ragnarök","Bloodborne","Halo Infinite"], c:1},
+  {q:"Qual jogo da seleção de Xbox é ambientado em um festival automobilístico no México?", a:["Forza Horizon 5","Gears 5","Starfield","Sea of Thieves"], c:0},
+  {q:"Em qual jogo da Nintendo Link explora Hyrule, os céus e as profundezas?", a:["Super Mario Odyssey","Metroid Dread","Tears of the Kingdom","Luigi's Mansion 3"], c:2},
+  {q:"Qual jogo de PC é focado em construção e administração de cidades?", a:["Hades","Cities: Skylines","Dota 2","Terraria"], c:1},
+  {q:"Qual estúdio desenvolveu The Last of Us Part II?", a:["Naughty Dog","Valve","Rare","Nintendo"], c:0},
+  {q:"Qual título usa combate sincronizado com música?", a:["Halo Infinite","Grounded","Hi-Fi Rush","Starfield"], c:2},
+  {q:"Qual jogo é conhecido por reunir dezenas de personagens históricos dos videogames em batalhas?", a:["Splatoon 3","Super Smash Bros. Ultimate","Fire Emblem","Mario Kart 8 Deluxe"], c:1},
+  {q:"Qual dos jogos de PC é um RPG futurista ambientado em Night City?", a:["Minecraft","Cyberpunk 2077","Baldur's Gate 3","Stardew Valley"], c:1},
+  {q:"Qual jogo da seleção PlayStation possui forte inspiração em horror gótico?", a:["Gran Turismo 7","Bloodborne","Ratchet & Clank","Spider-Man 2"], c:1},
+  {q:"Em qual jogo o jogador pode navegar pelos mares vivendo aventuras piratas em um mundo compartilhado?", a:["Sea of Thieves","State of Decay 2","Ori","Gears 5"], c:0},
+  {q:"Qual jogo da Nintendo é uma simulação social em uma ilha?", a:["Animal Crossing: New Horizons","Metroid Dread","Splatoon 3","Kirby"], c:0},
+  {q:"Qual jogo de PC é um MOBA desenvolvido pela Valve?", a:["League of Legends","Counter-Strike 2","Dota 2","Terraria"], c:2}
+];
+
+let currentPlatform = "playstation";
+let quizIndex = 0;
+let score = 0;
+let answered = false;
+
+const nav = document.getElementById("nav");
+const grid = document.getElementById("gameGrid");
+const search = document.getElementById("search");
+
+Object.entries(platforms).forEach(([key,p],i)=>{
+  const btn = document.createElement("button");
+  btn.className = "nav-btn" + (i===0 ? " active":"");
+  btn.textContent = p.label;
+  btn.onclick = () => switchPlatform(key);
+  btn.dataset.key = key;
+  nav.appendChild(btn);
+});
+
+const quizBtn = document.createElement("button");
+quizBtn.className = "nav-btn";
+quizBtn.textContent = "Quiz";
+quizBtn.onclick = openQuiz;
+nav.appendChild(quizBtn);
+
+function coverUrl(title){
+  const seed = encodeURIComponent(title.toLowerCase().replaceAll(" ","-"));
+  return `https://picsum.photos/seed/${seed}/520/780`;
+}
+
+function switchPlatform(key){
+  currentPlatform = key;
+  const p = platforms[key];
+  document.documentElement.style.setProperty("--accent",p.accent);
+  document.documentElement.style.setProperty("--accent-soft",p.soft);
+
+  document.getElementById("heroEyebrow").textContent = "🎮 " + p.emoji;
+  document.getElementById("heroTitle").textContent = p.label;
+  document.getElementById("heroText").textContent = p.description;
+  document.getElementById("sectionTitle").textContent = "Jogos de " + p.label;
+  document.getElementById("sectionText").textContent = "10 títulos selecionados para esta plataforma.";
+
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.key===key));
+  search.value="";
+  renderGames(p.games);
+  backToCatalog(false);
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderGames(games){
+  grid.innerHTML="";
+  if(!games.length){
+    grid.innerHTML='<div class="empty">Nenhum jogo encontrado.</div>';
+    return;
+  }
+  games.forEach((g,index)=>{
+    const [title,year,genre,studio,desc] = g;
+    const card = document.createElement("article");
+    card.className="game-card";
+    card.innerHTML=`
+      <div class="cover">
+        <img loading="lazy" src="${coverUrl(title)}" alt="${title}">
+        <div class="cover-overlay">
+          <div class="quick">
+            <span class="chip">${year}</span>
+            <span class="chip">${genre}</span>
+          </div>
+        </div>
+      </div>
+      <div class="game-info">
+        <h3 class="game-title">${title}</h3>
+        <div class="game-meta"><span>${year}</span><span>•</span><span>${genre}</span></div>
+      </div>`;
+    card.onclick=()=>openModal(g);
+    grid.appendChild(card);
+  });
+}
+
+search.addEventListener("input",()=>{
+  const term=search.value.trim().toLowerCase();
+  const games=platforms[currentPlatform].games.filter(g =>
+    g.join(" ").toLowerCase().includes(term)
+  );
+  renderGames(games);
+});
+
+function openModal(game){
+  const [title,year,genre,studio,desc]=game;
+  document.getElementById("modalPlatform").textContent=platforms[currentPlatform].label;
+  document.getElementById("modalTitle").textContent=title;
+  document.getElementById("modalDescription").textContent=desc;
+  document.getElementById("modalYear").textContent=year;
+  document.getElementById("modalGenre").textContent=genre;
+  document.getElementById("modalStudio").textContent=studio;
+  document.getElementById("modal").classList.add("active");
+  document.body.style.overflow="hidden";
+}
+function closeModal(){
+  document.getElementById("modal").classList.remove("active");
+  document.body.style.overflow="";
+}
+function modalBackdrop(e){
+  if(e.target.id==="modal") closeModal();
+}
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+
+function openQuiz(){
+  document.getElementById("catalog").classList.add("hidden");
+  document.getElementById("quizWrap").classList.add("active");
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  quizIndex=0;score=0;answered=false;
+  renderQuestion();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function backToCatalog(scroll=true){
+  document.getElementById("catalog").classList.remove("hidden");
+  document.getElementById("quizWrap").classList.remove("active");
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.key===currentPlatform));
+  if(scroll) window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function renderQuestion(){
+  answered=false;
+  const item=quiz[quizIndex];
+  document.getElementById("quizCounter").textContent=`Pergunta ${quizIndex+1} de ${quiz.length}`;
+  document.getElementById("progressBar").style.width=`${(quizIndex/quiz.length)*100}%`;
+
+  const content=document.getElementById("quizContent");
+  content.innerHTML=`
+    <h2 class="question">${item.q}</h2>
+    <div class="answers">
+      ${item.a.map((x,i)=>`<button class="answer" onclick="chooseAnswer(${i},this)">${x}</button>`).join("")}
+    </div>
+    <button class="primary quiz-next" id="nextBtn" onclick="nextQuestion()">Próxima pergunta</button>
+  `;
+}
+
+function chooseAnswer(index,btn){
+  if(answered)return;
+  answered=true;
+  const item=quiz[quizIndex];
+  const buttons=[...document.querySelectorAll(".answer")];
+  buttons.forEach((b,i)=>{
+    b.disabled=true;
+    if(i===item.c)b.classList.add("correct");
+  });
+  if(index===item.c) score++;
+  else btn.classList.add("wrong");
+  document.getElementById("nextBtn").style.display="inline-block";
+}
+
+function nextQuestion(){
+  quizIndex++;
+  if(quizIndex>=quiz.length) showResult();
+  else renderQuestion();
+}
+
+function showResult(){
+  document.getElementById("progressBar").style.width="100%";
+  document.getElementById("quizCounter").textContent="Quiz concluído";
+  const pct=Math.round((score/quiz.length)*100);
+  let msg = pct>=85 ? "Excelente! Você conhece muito bem o catálogo." :
+            pct>=60 ? "Muito bom! Você prestou atenção em boa parte do site." :
+            "Boa tentativa! Explore o catálogo novamente e tente outra vez.";
+  document.getElementById("quizContent").innerHTML=`
+    <div class="result">
+      <div class="eyebrow">Resultado final</div>
+      <div class="score">${score}/${quiz.length}</div>
+      <h2>${pct}% de acertos</h2>
+      <p style="color:var(--muted);line-height:1.7">${msg}</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:22px">
+        <button class="primary" onclick="openQuiz()">Refazer quiz</button>
+        <button class="secondary" onclick="backToCatalog()">Voltar ao catálogo</button>
+      </div>
+    </div>`;
+}
+
+renderGames(platforms.playstation.games);
+</script>
+</body>
+</html>
